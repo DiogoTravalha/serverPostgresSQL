@@ -81,6 +81,6 @@ app.delete('/todos/:id', async (req, res) => {
 });
 
 //Server
-app.listen(port, () => {
-    console.log('Server Online');
+app.listen(port, (req, res) => {
+    res.send('OLa');
 });
