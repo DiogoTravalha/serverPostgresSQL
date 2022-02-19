@@ -2,7 +2,6 @@ const express = require(`express`);
 const app = express();
 const cors = require('cors');
 const pool = require('./db');
-const { json } = require('express/lib/response');
 
 const port = process.env.PORT || 3333;
 
