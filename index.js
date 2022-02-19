@@ -4,6 +4,8 @@ const cors = require('cors');
 const pool = require('./db');
 const { json } = require('express/lib/response');
 
+const port = process.env.PORT || 3333;
+
 //Middleware
 app.use(cors());
 app.use(express.json());
@@ -80,6 +82,6 @@ app.delete('/todos/:id', async (req, res) => {
 });
 
 //Server
-app.listen(3333, () => {
+app.listen(port, () => {
     console.log('Server Online');
 });
