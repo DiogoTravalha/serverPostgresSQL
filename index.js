@@ -11,6 +11,10 @@ app.use(express.json());
 
 //Routes
 
+app.get('/', (req, res) => {
+    res.send('Estou Online');
+});
+
 //Create
 
 app.post('/todos', async (req, res) => {
@@ -82,5 +86,5 @@ app.delete('/todos/:id', async (req, res) => {
 
 //Server
 app.listen(port, () => {
-    console.info('Ola');
+    console.info(`server start ${port}`);
 });
