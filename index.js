@@ -1,6 +1,7 @@
 const express = require(`express`);
 const app = express();
 const pool = require('./db');
+const cors = require('cors');
 
 //Middleware
 const configs = {
@@ -9,7 +10,7 @@ const configs = {
     port: process.env.PORT || 3333,
 };
 
-app.use();
+app.use(cors({ origin: 'http://187.85.170.204' }));
 app.use(express.json());
 
 //Routes
