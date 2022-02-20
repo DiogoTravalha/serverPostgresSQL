@@ -2,6 +2,9 @@ const express = require(`express`);
 const app = express();
 const cors = require('cors');
 const pool = require('./db');
+const https = require('https');
+const path = require('path');
+const fs = require('fs');
 
 const port = process.env.PORT || 3333;
 
@@ -11,13 +14,13 @@ app.use(express.json());
 
 //Routes
 
-app.get('/', cors(), (req, res) => {
-    res.send('Estou Online');
-});
+// app.get('/', (req, res) => {
+//     res.send('Estou Online');
+// });
 
 //Create
 
-app.post('/todos', cors(), async (req, res) => {
+app.post('/', async (req, res) => {
     try {
         const { description } = req.body;
         const newTodo = await pool.query(
@@ -32,7 +35,7 @@ app.post('/todos', cors(), async (req, res) => {
 
 //Get all
 
-app.get('/todos', cors(), async (req, res) => {
+app.get('/', async (req, res) => {
     try {
         const allTodos = await pool.query('SELECT * FROM todo');
         res.json(allTodos.rows);
@@ -43,7 +46,7 @@ app.get('/todos', cors(), async (req, res) => {
 
 //Get a todo
 
-app.get('/todos/:id', cors(), async (req, res) => {
+app.get('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const todo = await pool.query('SELECT * FROM todo WHERE todo_id = $1', [
@@ -56,7 +59,7 @@ app.get('/todos/:id', cors(), async (req, res) => {
 });
 
 //Update
-app.put('/todos/:id', cors(), async (req, res) => {
+app.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { description } = req.body;
@@ -71,7 +74,7 @@ app.put('/todos/:id', cors(), async (req, res) => {
 });
 
 //Delete
-app.delete('/todos/:id', cors(), async (req, res) => {
+app.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const deleteTodo = await pool.query(
@@ -85,6 +88,14 @@ app.delete('/todos/:id', cors(), async (req, res) => {
 });
 
 //Server
+// const sslServer = https.createServer(
+//     // {
+//     //     key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+//     //     cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem')),
+//     // },
+//     app
+// );
+
 app.listen(port, () => {
     console.info(`server start ${port}`);
 });
