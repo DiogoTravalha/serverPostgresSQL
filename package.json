@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "heroku": "^7.59.2",
+    "path": "^0.12.7",
     "pg": "^8.7.3"
   }
 }

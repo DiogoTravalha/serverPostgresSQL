@@ -1,24 +1,35 @@
 const express = require(`express`);
 const app = express();
-const cors = require('cors');
 const pool = require('./db');
-const https = require('https');
 const path = require('path');
-const fs = require('fs');
-
-const port = process.env.PORT || 3333;
 
 //Middleware
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept'
-    );
-    cors();
-    next();
-});
-app.use(express.json());
+const configs = {
+    caminho: 'build', //Aqui será definido a pasta de saída onde contém o index.html e os outros arquivos.
+    forcarHTTPS: false, //Defina para true se desejar que o redirecionamento para HTTPS seja forçado (é necessário certificado SSL ativo)
+    port: process.env.PORT || 3333,
+};
+
+if (configs.forcarHTTPS)
+    //Se o redirecionamento HTTP estiver habilitado, registra o middleware abaixo
+    app.use((req, res, next) => {
+        //Cria um middleware onde todas as requests passam por ele
+        if ((req.headers['x-forwarded-proto'] || '').endsWith('http'))
+            //Checa se o protocolo informado nos headers é HTTP
+            res.redirect(`https://${req.headers.host}${req.url}`);
+        //Redireciona pra HTTPS
+        //Se a requisição já é HTTPS
+        else next(); //Não precisa redirecionar, passa para os próximos middlewares que servirão com o conteúdo desejado
+    });
+app.use(express.static(configs.caminho));
+
+// app.get('*', (req, res) => {
+//     // O wildcard '*' serve para servir o mesmo index.html independente do caminho especificado pelo navegador.
+//     res.sendFile(path.join(__dirname, configs.caminho, 'index'));
+// });
+
+// app.use();
+// app.use(express.json());
 
 //Routes
 
@@ -91,6 +102,11 @@ app.delete('/todos/:id', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.info(`server start ${port}`);
+// const port = process.env.PORT || 3333;
+
+// app.listen(port, () => {
+//     console.info(`server start ${port}`);
+// });
+app.listen(configs.port, () => {
+    console.log(`Escutando na ${configs.port}!`);
 });
