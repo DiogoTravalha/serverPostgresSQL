@@ -14,10 +14,6 @@ app.use(express.json());
 
 //Routes
 
-app.get('/todos', (req, res) => {
-    res.send('Estou Online');
-});
-
 //Get all
 
 app.get('/todos', async (req, res) => {
