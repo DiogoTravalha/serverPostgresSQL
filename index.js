@@ -14,8 +14,19 @@ app.use(express.json());
 
 //Routes
 
-app.get('/', (req, res) => {
+app.get('/todos', (req, res) => {
     res.send('Estou Online');
+});
+
+//Get all
+
+app.get('/todos', async (req, res) => {
+    try {
+        const allTodos = await pool.query('SELECT * FROM todo');
+        res.json(allTodos.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
 });
 
 //Create
@@ -28,17 +39,6 @@ app.post('/todos', async (req, res) => {
             [description]
         );
         res.json(newTodo.rows[0]);
-    } catch (error) {
-        console.log(error.message);
-    }
-});
-
-//Get all
-
-app.get('/todos', async (req, res) => {
-    try {
-        const allTodos = await pool.query('SELECT * FROM todo');
-        res.json(allTodos.rows);
     } catch (error) {
         console.log(error.message);
     }
